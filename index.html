@@ -1244,12 +1244,26 @@ function showResult() {
 
 function retryChapter() { startChapter(currentChapter.id); }
 function confirmBack() { if (confirm('क्या आप पर्व छोड़ना चाहते हैं?')) showChapterSelect(); }
-  function playCorrect() {
-  document.getElementById("correctSound").play();
+function playCorrect() {
+  const sound = document.getElementById("correctSound");
+  sound.currentTime = 0;
+  sound.play();
+
+  setTimeout(() => {
+    sound.pause();
+    sound.currentTime = 0;
+  }, 1500);
 }
 
 function playWrong() {
-  document.getElementById("wrongSound").play();
+  const sound = document.getElementById("wrongSound");
+  sound.currentTime = 0;
+  sound.play();
+
+  setTimeout(() => {
+    sound.pause();
+    sound.currentTime = 0;
+  }, 1000);
 }
 </script>
 <audio id="correctSound" src="conch.mp3"></audio>
