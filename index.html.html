@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>महाभारत - The Epic Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A017;
+    --gold-light: #F5C842;
+    --gold-dark: #8B6914;
+    --crimson: #8B0000;
+    --crimson-light: #C41E3A;
+    --deep-blue: #0A0A1A;
+    --midnight: #050510;
+    --parchment: #F5E6C8;
+    --orange: #E07B39;
+    --teal: #1A7A6E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--midnight);
+    color: var(--parchment);
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,220,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 70%, rgba(255,255,220,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 20%, rgba(255,255,220,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 50%, rgba(255,255,220,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 80%, rgba(255,255,220,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 60%, rgba(255,255,220,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 10%, rgba(255,255,220,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 45%, rgba(255,255,220,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 85%, rgba(255,255,220,0.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 25% 55%, rgba(255,200,100,0.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 75% 35%, rgba(255,200,100,0.4) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Screen management */
+  .screen { display: none; position: relative; z-index: 1; }
+  .screen.active { display: block; }
+
+  /* ===== TITLE SCREEN ===== */
+  #title-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(212,160,23,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(139,0,0,0.2) 0%, transparent 60%);
+  }
+
+  .title-om {
+    font-size: 5rem;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(212,160,23,0.8), 0 0 80px rgba(212,160,23,0.4);
+    animation: pulse-glow 3s ease-in-out infinite;
+    margin-bottom: 1rem;
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { text-shadow: 0 0 40px rgba(212,160,23,0.8), 0 0 80px rgba(212,160,23,0.4); }
+    50% { text-shadow: 0 0 60px rgba(212,160,23,1), 0 0 120px rgba(212,160,23,0.6), 0 0 200px rgba(212,160,23,0.2); }
+  }
+
+  .title-main {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #F5C842, #D4A017, #8B6914, #D4A017, #F5C842);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s ease infinite;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .title-sub {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--gold-light);
+    margin: 0.5rem 0 2rem;
+    opacity: 0.9;
+    letter-spacing: 0.1em;
+  }
+
+  .title-divider {
+    width: 300px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto;
+  }
+
+  .title-desc {
+    max-width: 600px;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: rgba(245,230,200,0.85);
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-dark));
+    color: var(--midnight);
+    border: none;
+    padding: 1rem 3rem;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(212,160,23,0.5); }
+
+  .char-preview {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .char-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: rgba(212,160,23,0.1);
+    animation: float 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .char-icon:nth-child(2) { animation-delay: 0.5s; }
+  .char-icon:nth-child(3) { animation-delay: 1s; }
+  .char-icon:nth-child(4) { animation-delay: 1.5s; }
+  .char-icon:nth-child(5) { animation-delay: 2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .char-icon:hover { border-color: var(--gold-light); box-shadow: 0 0 20px rgba(212,160,23,0.5); transform: scale(1.1) translateY(-4px); }
+
+  /* ===== CHAPTER SELECT ===== */
+  #chapter-screen {
+    min-height: 100vh;
+    padding: 2rem;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(26,122,110,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 50%, rgba(139,0,0,0.08) 0%, transparent 50%);
+  }
+
+  .screen-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+  }
+
+  .screen-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .screen-sub {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    color: rgba(245,230,200,0.7);
+    font-size: 1rem;
+  }
+
+  .chapters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .chapter-card {
+    border: 1px solid rgba(212,160,23,0.3);
+    background: linear-gradient(135deg, rgba(10,10,26,0.9), rgba(20,10,30,0.9));
+    padding: 1.5rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  }
+
+  .chapter-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(212,160,23,0.1), transparent, rgba(139,0,0,0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .chapter-card:hover::before { opacity: 1; }
+  .chapter-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(212,160,23,0.2); }
+
+  .chapter-card.locked { opacity: 0.4; cursor: not-allowed; }
+  .chapter-card.completed { border-color: var(--teal); }
+  .chapter-card.completed::after { content: '✓'; position: absolute; top: 1rem; right: 1rem; color: var(--teal); font-size: 1.5rem; }
+
+  .chapter-num {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.75rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-emoji { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
+
+  .chapter-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-hindi {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: 1.1rem;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-desc {
+    font-size: 0.9rem;
+    color: rgba(245,230,200,0.65);
+    line-height: 1.5;
+  }
+
+  /* ===== GAME SCREEN ===== */
+  #game-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .game-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(5,5,16,0.9);
+    border-bottom: 1px solid rgba(212,160,23,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-back {
+    background: transparent;
+    border: 1px solid rgba(212,160,23,0.4);
+    color: var(--gold);
+    padding: 0.4rem 1rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-back:hover { background: rgba(212,160,23,0.1); }
+
+  .topbar-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  .score-display {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+  }
+
+  .game-content {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+  }
+
+  /* Story panel */
+  .story-panel {
+    background: linear-gradient(135deg, rgba(10,10,26,0.95), rgba(15,5,20,0.95));
+    border: 1px solid rgba(212,160,23,0.25);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  }
+
+  .story-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .shloka {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    text-align: center;
+    font-style: italic;
+    padding: 1rem;
+    border-left: 3px solid var(--gold-dark);
+    margin-bottom: 1.5rem;
+    background: rgba(212,160,23,0.05);
+    line-height: 1.8;
+  }
+
+  .story-text {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--parchment);
+    margin-bottom: 1.5rem;
+  }
+
+  .story-text strong { color: var(--gold-light); }
+  .story-text em { color: var(--orange); font-style: italic; }
+
+  .character-highlight {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(212,160,23,0.1);
+    border: 1px solid rgba(212,160,23,0.3);
+    padding: 0.1rem 0.5rem;
+    border-radius: 2px;
+    font-weight: 600;
+    color: var(--gold-light);
+  }
+
+  /* Choice panel */
+  .choice-panel {
+    margin-bottom: 2rem;
+  }
+
+  .choice-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.85rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .choice-btn {
+    background: linear-gradient(135deg, rgba(10,10,26,0.9), rgba(20,10,30,0.9));
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--parchment);
+    padding: 1rem 1.5rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+
+  .choice-btn::before {
+    content: '◆';
+    color: var(--gold-dark);
+    margin-right: 0.8rem;
+    transition: color 0.3s ease;
+  }
+
+  .choice-btn:hover {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(212,160,23,0.15), rgba(139,0,0,0.1));
+    transform: translateX(5px);
+    color: var(--gold-light);
+  }
+
+  .choice-btn:hover::before { color: var(--gold); }
+
+  .choice-btn.correct {
+    border-color: #2ecc71;
+    background: rgba(46,204,113,0.1);
+    color: #2ecc71;
+    pointer-events: none;
+  }
+
+  .choice-btn.wrong {
+    border-color: var(--crimson-light);
+    background: rgba(196,30,58,0.1);
+    color: rgba(245,230,200,0.5);
+    pointer-events: none;
+  }
+
+  .choice-btn.disabled { pointer-events: none; opacity: 0.5; }
+
+  /* Feedback */
+  .feedback-panel {
+    display: none;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--gold);
+    background: rgba(212,160,23,0.05);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--parchment);
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-panel.correct-fb { border-color: #2ecc71; background: rgba(46,204,113,0.05); }
+  .feedback-panel.wrong-fb { border-color: var(--crimson-light); background: rgba(196,30,58,0.05); }
+
+  .next-btn {
+    display: none;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border: none;
+    color: var(--midnight);
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    letter-spacing: 0.1em;
+  }
+
+  .next-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(212,160,23,0.4); }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(245,230,200,0.6);
+    margin-bottom: 0.4rem;
+    font-family: 'Cinzel Decorative', cursive;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: rgba(212,160,23,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+    transition: width 0.5s ease;
+    border-radius: 2px;
+  }
+
+  /* Character cards */
+  .char-cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+
+  .char-card-mini {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(212,160,23,0.2);
+    padding: 0.4rem 0.8rem;
+    background: rgba(10,10,26,0.8);
+    font-size: 0.85rem;
+  }
+
+  /* ===== RESULT SCREEN ===== */
+  #result-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .result-emoji { font-size: 5rem; margin-bottom: 1rem; animation: bounce 1s ease; }
+
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  .result-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .result-score-big {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 4rem;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 1rem 0;
+  }
+
+  .result-message {
+    font-size: 1.2rem;
+    color: rgba(245,230,200,0.8);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 0.8rem 2rem;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
+  .btn-secondary:hover { background: rgba(212,160,23,0.1); transform: scale(1.03); }
+
+  /* Glow orb decoration */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb-1 { width: 400px; height: 400px; top: -200px; left: -200px; background: rgba(139,0,0,0.12); }
+  .orb-2 { width: 500px; height: 500px; bottom: -250px; right: -200px; background: rgba(212,160,23,0.08); }
+  .orb-3 { width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(26,122,110,0.05); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .game-content { padding: 1rem; }
+    .story-panel { padding: 1.5rem 1.2rem; }
+  }
+
+  /* Decorative corners */
+  .corner-decoration {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--gold-dark);
+    border-style: solid;
+    opacity: 0.5;
+  }
+  .corner-tl { top: 5px; left: 5px; border-width: 2px 0 0 2px; }
+  .corner-tr { top: 5px; right: 5px; border-width: 2px 2px 0 0; }
+  .corner-bl { bottom: 5px; left: 5px; border-width: 0 0 2px 2px; }
+  .corner-br { bottom: 5px; right: 5px; border-width: 0 2px 2px 0; }
+
+  .total-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+
+  .star { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- TITLE SCREEN -->
+<div id="title-screen" class="screen active">
+  <div class="title-om">ॐ</div>
+  <h1 class="title-main">MAHABHARAT</h1>
+  <p class="title-sub">महाभारत — महाकाव्य का खेल</p>
+  <div class="title-divider"></div>
+  <p class="title-desc">
+    "यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।<br>
+    अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्॥"<br><br>
+    धर्म, कर्म, और मोक्ष की इस महागाथा में<br>प्रवेश करें और अपना ज्ञान परखें।
+  </p>
+
+  <div class="char-preview">
+    <div class="char-icon" title="युधिष्ठिर">👑</div>
+    <div class="char-icon" title="अर्जुन">🏹</div>
+    <div class="char-icon" title="कृष्ण">🪈</div>
+    <div class="char-icon" title="भीम">💪</div>
+    <div class="char-icon" title="द्रौपदी">🌸</div>
+  </div>
+
+  <button class="btn-primary" onclick="showChapterSelect()">⚔ खेल शुरू करें ⚔</button>
+</div>
+
+<!-- CHAPTER SELECT -->
+<div id="chapter-screen" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" onclick="showScreen('title-screen')" style="margin-bottom:1rem">← वापस</button>
+    <h2 class="screen-title">अध्याय चुनें</h2>
+    <p class="screen-sub">Choose Your Chapter — पर्व का चयन करें</p>
+  </div>
+  <div class="chapters-grid" id="chapters-grid"></div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen" class="screen">
+  <div class="game-topbar">
+    <button class="btn-back" onclick="confirmBack()">← पर्व</button>
+    <div class="topbar-title" id="topbar-chapter-name">महाभारत</div>
+    <div class="total-score-bar">
+      <span class="star">★</span>
+      <span id="total-score-display">0</span>
+    </div>
+  </div>
+  <div class="game-content">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progress-text">प्रश्न 1/5</span>
+        <span id="score-text">अंक: 0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="story-panel" id="story-panel">
+      <div class="corner-decoration corner-tl"></div>
+      <div class="corner-decoration corner-tr"></div>
+      <div class="corner-decoration corner-bl"></div>
+      <div class="corner-decoration corner-br"></div>
+      <div class="shloka" id="shloka-text"></div>
+      <div class="story-text" id="story-text"></div>
+    </div>
+
+    <div class="feedback-panel" id="feedback-panel"></div>
+
+    <div class="choice-panel">
+      <p class="choice-title">— आपका निर्णय क्या है? —</p>
+      <div class="choices" id="choices-container"></div>
+    </div>
+
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न →</button>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result-screen" class="screen">
+  <div class="result-emoji" id="result-emoji">🏆</div>
+  <h2 class="result-title" id="result-title">शाबाश!</h2>
+  <div class="result-score-big" id="result-score"></div>
+  <p class="result-message" id="result-message"></p>
+  <div class="result-actions">
+    <button class="btn-secondary" onclick="retryChapter()">↺ फिर से खेलें</button>
+    <button class="btn-primary" onclick="showChapterSelect()">📖 अन्य पर्व</button>
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+
+const chapters = [
+  {
+    id: 0,
+    name: "Adi Parva",
+    hindi: "आदि पर्व",
+    emoji: "🌄",
+    desc: "महाभारत का आरंभ — कुरु वंश की उत्पत्ति, देवव्रत (भीष्म) की प्रतिज्ञा, और पांडवों-कौरवों का जन्म।",
+    unlocked: true,
+    questions: [
+      {
+        shloka: "जनमेजय उवाच — हे द्विजश्रेष्ठ, पितामहों की कथा सुनाइए।",
+        story: "महर्षि <strong>वेदव्यास</strong> ने 18 पर्वों में महाभारत की रचना की। इस महाकाव्य का पहला पर्व <em>आदि पर्व</em> है। इसमें <strong>शांतनु</strong> और <strong>गंगा</strong> के पुत्र <strong>देवव्रत</strong> की कथा है, जिन्होंने आजीवन ब्रह्मचर्य की भीष्म प्रतिज्ञा ली।",
+        question: "देवव्रत को 'भीष्म' नाम किसलिए मिला?",
+        choices: [
+          { text: "क्योंकि वे बहुत शक्तिशाली थे", correct: false },
+          { text: "क्योंकि उन्होंने भीष्म (भयंकर) प्रतिज्ञा ली — आजीवन विवाह न करने की", correct: true },
+          { text: "क्योंकि वे गंगा के पुत्र थे", correct: false },
+          { text: "क्योंकि वे महाभारत युद्ध में अजेय थे", correct: false }
+        ],
+        feedback: "✅ बिल्कुल सही! देवव्रत ने सत्यवती के पिता की माँग पर यह भीष्म (भयंकर) प्रतिज्ञा ली कि वे न कभी विवाह करेंगे, न कभी राज सिंहासन पर दावा करेंगे। इसी कारण उनका नाम 'भीष्म' पड़ा।"
+      },
+      {
+        shloka: "धृतराष्ट्रः पाण्डुश्च विदुरश्च महामतिः।",
+        story: "हस्तिनापुर में <strong>विचित्रवीर्य</strong> की मृत्यु के बाद <strong>वेदव्यास</strong> ने नियोग विधि से तीन पुत्रों को जन्म दिया। <strong>अंबिका</strong> से <strong>धृतराष्ट्र</strong> (जन्मांध), <strong>अंबालिका</strong> से <strong>पांडु</strong>, और दासी से <strong>विदुर</strong> का जन्म हुआ।",
+        question: "धृतराष्ट्र जन्म से अंधे क्यों थे?",
+        choices: [
+          { text: "शाप के कारण", correct: false },
+          { text: "उनकी माँ अंबिका ने वेदव्यास को देखकर आँखें बंद कर लीं", correct: true },
+          { text: "युद्ध में घायल होने से", correct: false },
+          { text: "यह एक दैवीय वरदान था", correct: false }
+        ],
+        feedback: "✅ सही! जब वेदव्यास अंबिका के कक्ष में गए तो उनका रूप देखकर अंबिका ने भय से आँखें बंद कर लीं। इसी कारण उनका पुत्र धृतराष्ट्र जन्मांध हुआ।"
+      },
+      {
+        shloka: "पाण्डोः पुत्राः पञ्च वीराः — युधिष्ठिरादयः।",
+        story: "<strong>पांडु</strong> को एक ऋषि ने शाप दिया था कि वे पत्नी के साथ रहने पर मृत्यु को प्राप्त होंगे। इसलिए <strong>कुंती</strong> ने मंत्र की शक्ति से <strong>धर्मराज</strong>, <strong>वायु</strong> और <strong>इंद्र</strong> से पुत्र प्राप्त किए — <strong>युधिष्ठिर, भीम</strong> और <strong>अर्जुन</strong>।",
+        question: "अर्जुन किस देव के पुत्र थे?",
+        choices: [
+          { text: "धर्मराज (यम) के", correct: false },
+          { text: "वायु देव के", correct: false },
+          { text: "इंद्र देव के", correct: true },
+          { text: "सूर्य देव के", correct: false }
+        ],
+        feedback: "✅ बिल्कुल! अर्जुन इंद्र देव के पुत्र थे। इसीलिए उन्हें 'इंद्रपुत्र' और 'फाल्गुन' भी कहा जाता है। सूर्यपुत्र कर्ण थे, जो कुंती के प्रथम पुत्र थे।"
+      },
+      {
+        shloka: "द्रोणाचार्यस्य शिष्येषु अर्जुनः श्रेष्ठतमः।",
+        story: "राजकुमारों को शिक्षा देने वाले <strong>द्रोणाचार्य</strong> ने गुरुदक्षिणा में अपने शत्रु <strong>द्रुपद</strong> का आधा राज्य माँगा। लेकिन एक घटना हुई जब एक कुत्ते के मुँह में तीर चला गया और सबने देखा कि यह कारनामा बिना देखे ही हुआ।",
+        question: "एकलव्य ने किसे अपना गुरु माना था?",
+        choices: [
+          { text: "कृपाचार्य को", correct: false },
+          { text: "द्रोणाचार्य को — मिट्टी की मूर्ति बनाकर", correct: true },
+          { text: "परशुराम को", correct: false },
+          { text: "भीष्म को", correct: false }
+        ],
+        feedback: "✅ सही! एकलव्य ने द्रोणाचार्य की मिट्टी की मूर्ति बनाकर उनकी पूजा की और धनुर्विद्या सीखी। जब द्रोणाचार्य को पता चला, तो उन्होंने गुरुदक्षिणा में उसका अंगूठा माँग लिया ताकि अर्जुन ही सर्वश्रेष्ठ धनुर्धर रहें।"
+      },
+      {
+        shloka: "लाक्षागृहे पाण्डवाः दग्धुं प्रयत्नः कृतः।",
+        story: "<strong>दुर्योधन</strong> ने <strong>पुरोचन</strong> की सहायता से पांडवों को <strong>वारणावत</strong> में लाक्षागृह (लाख के घर) में जलाने की साजिश रची। लेकिन <strong>विदुर</strong> ने पहले ही संकेत में पांडवों को सचेत कर दिया था।",
+        question: "लाक्षागृह से पांडव कैसे बचे?",
+        choices: [
+          { text: "कृष्ण ने उन्हें बचाया", correct: false },
+          { text: "भीम ने सुरंग खोदी जो नदी तक जाती थी और वे भाग गए", correct: true },
+          { text: "वे घर में थे ही नहीं", correct: false },
+          { text: "देवताओं ने वर्षा करा दी", correct: false }
+        ],
+        feedback: "✅ बिल्कुल सही! विदुर के एक विश्वासपात्र व्यक्ति ने पहले से सुरंग खोद दी थी। रात को आग लगने से पहले पांडव और कुंती सुरंग से निकल गए। उन्होंने एक निषाद स्त्री और उसके पाँच पुत्रों के शव वहाँ छोड़े ताकि सब समझें कि पांडव मारे गए।"
+      }
+    ]
+  },
+  {
+    id: 1,
+    name: "Sabha Parva",
+    hindi: "सभा पर्व",
+    emoji: "🎲",
+    desc: "इंद्रप्रस्थ का निर्माण, राजसूय यज्ञ, द्यूत क्रीड़ा, और द्रौपदी का अपमान — जो महायुद्ध का मुख्य कारण बना।",
+    unlocked: true,
+    questions: [
+      {
+        shloka: "मयेन निर्मितं सभागारं दिव्यम् इंद्रप्रस्थे।",
+        story: "<strong>युधिष्ठिर</strong> ने <strong>इंद्रप्रस्थ</strong> में विशाल सभागार बनवाया जो <strong>मय दानव</strong> ने बनाया था। उस सभा में फर्श इतना पारदर्शी था कि <strong>दुर्योधन</strong> उसे पानी समझकर कपड़े उठा लेता था और जहाँ पानी था, वहाँ गिर जाता था।",
+        question: "राजसूय यज्ञ में 'अग्रपूजा' (प्रथम सम्मान) किसे मिली?",
+        choices: [
+          { text: "युधिष्ठिर को", correct: false },
+          { text: "भीष्म पितामह को", correct: false },
+          { text: "श्रीकृष्ण को", correct: true },
+          { text: "द्रोणाचार्य को", correct: false }
+        ],
+        feedback: "✅ सही! भीष्म के सुझाव पर श्रीकृष्ण को राजसूय यज्ञ में सर्वप्रथम सम्मान दिया गया। इस पर शिशुपाल ने आपत्ति जताई और कृष्ण का अपमान किया। उसने 100 अपराध करने पर कृष्ण ने अपने सुदर्शन चक्र से शिशुपाल का वध किया।"
+      },
+      {
+        shloka: "अक्षक्रीडायां पाण्डवाः सर्वस्वं अहासुः।",
+        story: "<strong>शकुनि</strong> ने पासे के खेल में <strong>युधिष्ठिर</strong> को आमंत्रित किया। युधिष्ठिर को जुए की लत थी। उन्होंने एक-एक करके सब कुछ — राज्य, भाइयों को, स्वयं को और अंत में <strong>द्रौपदी</strong> को भी दाँव पर लगा दिया।",
+        question: "शकुनि के पासे में क्या विशेषता थी?",
+        choices: [
+          { text: "वे सोने के बने थे", correct: false },
+          { text: "वे हमेशा शकुनि की इच्छा अनुसार गिरते थे — उसके मृत पिता की हड्डियों से बने थे", correct: true },
+          { text: "वे देवताओं द्वारा दिए गए थे", correct: false },
+          { text: "वे मायावी थे जो बदल सकते थे", correct: false }
+        ],
+        feedback: "✅ बिल्कुल! शकुनि के पासे उसके पिता की हड्डियों से बने थे। उसके पिता ने मरते समय वरदान दिया था कि ये पासे शकुनि की मर्जी से ही गिरेंगे। यही उसकी छल की शक्ति थी।"
+      },
+      {
+        shloka: "धर्मस्य सूक्ष्मा गतिः — द्रौपदी प्रश्नः।",
+        story: "द्यूत सभा में <strong>द्रौपदी</strong> को बालों से पकड़कर सभा में लाया गया। <strong>दु:शासन</strong> उनका वस्त्र हरण करने लगा। पांडव मौन रहे। <strong>धृतराष्ट्र</strong> भी चुप रहे।",
+        question: "द्रौपदी की रक्षा किसने की जब दु:शासन वस्त्र हरण कर रहा था?",
+        choices: [
+          { text: "भीम ने", correct: false },
+          { text: "अर्जुन ने", correct: false },
+          { text: "श्रीकृष्ण ने — उन्होंने अनंत वस्त्र प्रदान किए", correct: true },
+          { text: "विदुर ने", correct: false }
+        ],
+        feedback: "✅ सही! जब द्रौपदी ने 'हे गोविंद, हे द्वारकानाथ' पुकारा, तब श्रीकृष्ण ने अदृश्य रूप से उनके वस्त्रों को अनंत कर दिया। दु:शासन थककर गिर गया पर वस्त्र नहीं समाप्त हुए। यह लीला कृष्ण की भक्तवत्सलता का प्रमाण है।"
+      },
+      {
+        shloka: "वनवासं च अज्ञातवासं च पाण्डवाः स्वीकृतवन्तः।",
+        story: "द्यूत के परिणामस्वरूप पांडवों को <strong>12 वर्ष वनवास</strong> और <strong>1 वर्ष अज्ञातवास</strong> की शर्त माननी पड़ी। अज्ञातवास में यदि वे पहचाने जाते तो 12 और वर्ष वनवास में जाना पड़ता।",
+        question: "अज्ञातवास के दौरान पांडव किस राज्य में और किस वेष में रहे?",
+        choices: [
+          { text: "मत्स्य राज्य में, राजा विराट के दरबार में विभिन्न वेषों में", correct: true },
+          { text: "द्वारका में कृष्ण के साथ", correct: false },
+          { text: "पांचाल में द्रुपद के यहाँ", correct: false },
+          { text: "हस्तिनापुर में छुपकर", correct: false }
+        ],
+        feedback: "✅ बिल्कुल सही! पांडव राजा विराट के मत्स्य राज्य में रहे। युधिष्ठिर — कंक (ब्राह्मण), भीम — बल्लव (रसोइया), अर्जुन — बृहन्नला (नृत्य शिक्षक), नकुल-सहदेव — अश्वपालक, और द्रौपदी — सैरंध्री (दासी) बनकर रहे।"
+      },
+      {
+        shloka: "द्रौपदीं प्रति कीचकस्य दुर्व्यवहारः।",
+        story: "अज्ञातवास में विराट के सेनापति <strong>कीचक</strong> ने द्रौपदी (सैरंध्री) पर कुदृष्टि डाली। <strong>भीम</strong> ने उससे द्रौपदी का बदला लिया।",
+        question: "भीम ने कीचक को कैसे मारा?",
+        choices: [
+          { text: "खुले युद्ध में", correct: false },
+          { text: "रात को नृत्यशाला में बुलाकर गुप्त रूप से वध किया", correct: true },
+          { text: "विष देकर", correct: false },
+          { text: "अर्जुन ने बाण से मारा", correct: false }
+        ],
+        feedback: "✅ सही! द्रौपदी ने कीचक को रात को नृत्यशाला में मिलने का संदेश भेजा। वहाँ भीम स्त्री वेश में छुपे थे और उन्होंने कीचक का वध किया। इससे पांडवों की पहचान का खतरा हुआ पर वे बचे रहे।"
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: "Udyoga Parva",
+    hindi: "उद्योग पर्व",
+    emoji: "🤝",
+    desc: "युद्ध की तैयारी, शांति के प्रयास, कृष्ण की शांतिदूत यात्रा, और कर्ण का रहस्य।",
+    unlocked: true,
+    questions: [
+      {
+        shloka: "संजयः उवाच — धृतराष्ट्र दूत बनकर पांडवों के पास गए।",
+        story: "अज्ञातवास पूर्ण होने पर <strong>युधिष्ठिर</strong> ने शांति संदेश भेजा कि सिर्फ <strong>5 गाँव</strong> मिल जाएँ तो युद्ध टल सकता है। दुर्योधन ने कहा — <em>\"सुई की नोक जितनी जमीन भी नहीं दूँगा।\"</em>",
+        question: "श्रीकृष्ण शांतिदूत के रूप में हस्तिनापुर गए। वहाँ दुर्योधन ने क्या किया?",
+        choices: [
+          { text: "माफी माँगी और आधा राज्य लौटाने को तैयार हुए", correct: false },
+          { text: "कृष्ण को कैद करने का प्रयास किया", correct: true },
+          { text: "कृष्ण की बात मानकर 5 गाँव देने को राजी हुए", correct: false },
+          { text: "कृष्ण को सम्मान के साथ वापस भेजा", correct: false }
+        ],
+        feedback: "✅ सही! दुर्योधन ने कृष्ण को बंदी बनाने की कोशिश की। इस पर कृष्ण ने विराट रूप दिखाया। इसके बाद कृष्ण ने घोषणा की कि अब युद्ध अनिवार्य है।"
+      },
+      {
+        shloka: "नारायणी सेना अर्जुनाय, कृष्णः कौन्तेयाय।",
+        story: "युद्ध से पहले <strong>दुर्योधन</strong> और <strong>अर्जुन</strong> दोनों <strong>कृष्ण</strong> से सहायता माँगने द्वारका पहुँचे। कृष्ण ने कहा — एक तरफ मैं (अकेला, अस्त्र नहीं चलाऊँगा) और दूसरी तरफ मेरी पूरी नारायणी सेना।",
+        question: "अर्जुन ने कृष्ण की नारायणी सेना के बदले कृष्ण को ही क्यों चुना?",
+        choices: [
+          { text: "क्योंकि कृष्ण शक्तिशाली थे", correct: false },
+          { text: "क्योंकि उन्हें केवल कृष्ण का मार्गदर्शन चाहिए था, विजय नहीं सेना", correct: true },
+          { text: "क्योंकि नारायणी सेना कमजोर थी", correct: false },
+          { text: "युधिष्ठिर ने ऐसा करने को कहा था", correct: false }
+        ],
+        feedback: "✅ अर्जुन ने कहा — 'आप मेरे सारथी बनें, बस इतना काफी है।' यही भक्ति और विश्वास था। दुर्योधन को विशाल नारायणी सेना मिली, पर अंत में परमात्मा की शक्ति अर्जुन के साथ थी।"
+      },
+      {
+        shloka: "कर्णः कुंत्याः प्रथमपुत्रः — रहस्यम्।",
+        story: "युद्ध से पहले <strong>कुंती</strong> ने <strong>कर्ण</strong> के पास जाकर उनका सत्य बताया — <em>\"तुम मेरे ज्येष्ठ पुत्र हो, पांडवों के बड़े भाई।\"</em> उन्होंने कर्ण से पांडवों की तरफ आने को कहा।",
+        question: "कर्ण ने कुंती को क्या वचन दिया?",
+        choices: [
+          { text: "युद्ध नहीं करूँगा और पांडवों से मिल जाऊँगा", correct: false },
+          { text: "अर्जुन के अलावा किसी पांडव को नहीं मारूँगा — 5 पांडव जीवित रहेंगे", correct: true },
+          { text: "दुर्योधन का साथ छोड़ दूँगा", correct: false },
+          { text: "युद्धभूमि से दूर रहूँगा", correct: false }
+        ],
+        feedback: "✅ सही! कर्ण ने कहा — 'पाँच पांडव तो हमेशा रहेंगे, चाहे अर्जुन जिए या मैं। अगर मैंने अर्जुन को मारा तो पाँचों में से एक (मैं) बचेगा, और अगर अर्जुन ने मुझे मारा तो भी पाँच पांडव रहेंगे।' यह कर्ण की महानता थी।"
+      },
+      {
+        shloka: "इंद्रो वेषधारी कर्णस्य कवचकुण्डले ययाचे।",
+        story: "<strong>इंद्र देव</strong> ने कर्ण की दानशीलता जानकर ब्राह्मण वेश में उनसे <strong>कवच-कुंडल</strong> (जन्मजात सुरक्षा कवच) माँग लिए। कृष्ण ने कर्ण को सचेत किया था पर उन्होंने फिर भी दान किया।",
+        question: "इंद्र ने कवच-कुंडल के बदले कर्ण को क्या दिया?",
+        choices: [
+          { text: "वज्र अस्त्र", correct: false },
+          { text: "शक्ति — एक बार काम आने वाला अमोघ अस्त्र जो किसी को भी मार सके", correct: true },
+          { text: "अमरत्व का वरदान", correct: false },
+          { text: "अजेय धनुष", correct: false }
+        ],
+        feedback: "✅ सही! इंद्र ने 'शक्ति' नामक अमोघ अस्त्र दिया जो एक बार प्रयोग से कोई भी अजेय योद्धा मारा जा सकता था। कर्ण इसे अर्जुन पर चलाना चाहते थे, पर कृष्ण की लीला से उन्हें घटोत्कच पर चलाना पड़ा।"
+      },
+      {
+        shloka: "कुरुक्षेत्रं रणक्षेत्रं — धर्मक्षेत्रे कुरुक्षेत्रे।",
+        story: "दोनों सेनाएँ <strong>कुरुक्षेत्र</strong> में आमने-सामने हुईं। <strong>18 दिन</strong> के युद्ध की तैयारी हुई। <strong>कौरवों</strong> के पास 11 अक्षौहिणी और <strong>पांडवों</strong> के पास 7 अक्षौहिणी सेना थी।",
+        question: "कौरवों का प्रथम सेनापति कौन था?",
+        choices: [
+          { text: "कर्ण", correct: false },
+          { text: "द्रोणाचार्य", correct: false },
+          { text: "भीष्म पितामह — 10 दिन तक", correct: true },
+          { text: "अश्वत्थामा", correct: false }
+        ],
+        feedback: "✅ बिल्कुल! भीष्म पितामह 10 दिन तक कौरवों के सेनापति रहे। उनके बाद द्रोणाचार्य (5 दिन), फिर कर्ण (2 दिन), और अंत में शल्य (1 दिन) सेनापति बने।"
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: "Bhishma & Drona Parva",
+    hindi: "भीष्म व द्रोण पर्व",
+    emoji: "⚔️",
+    desc: "गीता का उपदेश, भीष्म का पतन, चक्रव्यूह में अभिमन्यु, और द्रोणाचार्य का वध।",
+    unlocked: true,
+    questions: [
+      {
+        shloka: "धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः।",
+        story: "जब युद्ध शुरू होने वाला था, <strong>अर्जुन</strong> ने अपने स्वजनों को सामने देखा और शस्त्र रख दिए। वे मोहग्रस्त हो गए। तब <strong>श्रीकृष्ण</strong> ने <strong>गीता</strong> का उपदेश दिया — जो 18 अध्यायों में है।",
+        question: "गीता में कृष्ण ने अर्जुन को 'कर्म' के बारे में क्या कहा?",
+        choices: [
+          { text: "फल की इच्छा से कर्म करो", correct: false },
+          { text: "युद्ध मत करो, शांति बेहतर है", correct: false },
+          { text: "कर्म करते रहो, फल की चिंता मत करो", correct: true },
+          { text: "परिवार धर्म से बड़ा है", correct: false }
+        ],
+        feedback: "✅ 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन' — यही गीता का सार है। कर्म करना तुम्हारा अधिकार है, फल की चिंता नहीं। निष्काम कर्म ही मोक्ष का मार्ग है।"
+      },
+      {
+        shloka: "भीष्मः शरशय्यायां शयानः — इच्छामृत्युधारी।",
+        story: "<strong>भीष्म</strong> के पास <strong>इच्छामृत्यु</strong> का वरदान था। उन्हें बाणों की शैय्या पर लिटाने के लिए <strong>शिखंडी</strong> (पूर्वजन्म की अंबा) को सामने खड़ा किया गया। भीष्म ने शिखंडी पर वार नहीं किया और अर्जुन ने उन्हें बाणों से ढक दिया।",
+        question: "भीष्म ने कितने दिन तक शरशैया पर लेटकर प्राण नहीं त्यागे?",
+        choices: [
+          { text: "10 दिन", correct: false },
+          { text: "58 दिन — उत्तरायण का इंतजार करते हुए", correct: true },
+          { text: "21 दिन", correct: false },
+          { text: "1 वर्ष", correct: false }
+        ],
+        feedback: "✅ सही! भीष्म ने 58 दिन तक शरशैया पर लेटकर उत्तरायण (मकर संक्रांति) की प्रतीक्षा की। उन्होंने युधिष्ठिर को राजधर्म और नीति का उपदेश दिया। उत्तरायण आने पर उन्होंने स्वेच्छा से प्राण त्यागे।"
+      },
+      {
+        shloka: "चक्रव्यूहे अभिमन्युः एकाकी युद्धं कृतवान्।",
+        story: "<strong>द्रोणाचार्य</strong> ने चक्रव्यूह की रचना की। केवल <strong>अर्जुन</strong> और <strong>कृष्ण</strong> इसे भेदना जानते थे। <strong>अभिमन्यु</strong> (अर्जुन का 16 वर्षीय पुत्र) चक्रव्यूह में घुसना जानता था पर निकलना नहीं।",
+        question: "अभिमन्यु को चक्रव्यूह भेदना कहाँ से पता था?",
+        choices: [
+          { text: "कृष्ण ने सिखाया था", correct: false },
+          { text: "माँ के गर्भ में सुभद्रा को अर्जुन सुना रहे थे, बीच में माँ सो गई", correct: true },
+          { text: "द्रोणाचार्य ने सिखाया था", correct: false },
+          { text: "उन्होंने स्वयं सीखा था", correct: false }
+        ],
+        feedback: "✅ सही! जब अर्जुन सुभद्रा को चक्रव्यूह भेदने की विधि बता रहे थे, तब गर्भस्थ अभिमन्यु सुन रहा था। बाहर निकलने की विधि बताते समय सुभद्रा सो गई, इसलिए अभिमन्यु अधूरा ज्ञान लेकर जन्मा।"
+      },
+      {
+        shloka: "जयद्रथवधः — अर्जुनस्य प्रतिज्ञा।",
+        story: "अभिमन्यु के वध में <strong>जयद्रथ</strong> ने द्वार बंद किया था। <strong>अर्जुन</strong> ने प्रतिज्ञा की कि अगले दिन सूर्यास्त से पहले जयद्रथ को मारूँगा, अन्यथा स्वयं अग्नि में प्रवेश करूँगा। दुर्योधन ने जयद्रथ को छुपा दिया।",
+        question: "कृष्ण ने जयद्रथ वध में क्या लीला की?",
+        choices: [
+          { text: "जयद्रथ को प्रकट कर दिया", correct: false },
+          { text: "सुदर्शन चक्र से सूर्य को ढककर नकली सूर्यास्त कर दिया, जयद्रथ बाहर आया और अर्जुन ने वध किया", correct: true },
+          { text: "जयद्रथ को अर्जुन के पास धकेल दिया", correct: false },
+          { text: "जयद्रथ का मनोबल तोड़ा", correct: false }
+        ],
+        feedback: "✅ क्या लीला! कृष्ण ने सुदर्शन चक्र से सूर्य को ढक दिया। सब समझे सूर्यास्त हो गया, जयद्रथ खुशी से बाहर आया। तब कृष्ण ने सुदर्शन हटाया और अर्जुन ने एक ही बाण से जयद्रथ का सिर काट दिया।"
+      },
+      {
+        shloka: "द्रोणाचार्यः अश्वत्थामा-मृत्युवार्तां श्रुत्वा शस्त्रं त्यक्तवान्।",
+        story: "<strong>द्रोणाचार्य</strong> को पुत्रमोह था। पांडवों ने चाल चली — <strong>भीम</strong> ने 'अश्वत्थामा' नामक हाथी को मारकर शोर मचाया — <em>\"अश्वत्थामा हतः।\"</em> युधिष्ठिर ने धीरे से कहा — <em>\"...इति नरो वा कुंजरो वा।\"</em>",
+        question: "युधिष्ठिर द्वारा यह बात कहे जाने पर क्या हुआ?",
+        choices: [
+          { text: "द्रोण ने युद्ध और तेज किया", correct: false },
+          { text: "द्रोण ने शस्त्र रख दिए और ध्यान में बैठ गए, धृष्टद्युम्न ने उनका वध किया", correct: true },
+          { text: "अश्वत्थामा स्वयं आ गए", correct: false },
+          { text: "कृष्ण ने द्रोण को बंदी बना लिया", correct: false }
+        ],
+        feedback: "✅ सही! द्रोण पुत्र-शोक में टूट गए और शस्त्र रखकर ध्यान में बैठ गए। द्रौपदी के भाई धृष्टद्युम्न ने उनका सिर काट दिया। युधिष्ठिर का रथ सत्य के कारण जमीन से 4 अंगुल ऊपर चलता था, इस अर्धसत्य के कारण वह जमीन पर आ गया।"
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Karna & Shalya & Sauptika",
+    hindi: "कर्ण, शल्य व सौप्तिक पर्व",
+    emoji: "🌅",
+    desc: "कर्ण का वध, कुरुक्षेत्र का अंत, दुर्योधन का पतन, और रात्रि में अश्वत्थामा का प्रतिशोध।",
+    unlocked: true,
+    questions: [
+      {
+        shloka: "कर्णः वसुषेणः — दानवीरः शूरपुत्रः।",
+        story: "<strong>कर्ण</strong> महाभारत का सबसे त्रासद नायक है। सूत पुत्र कहलाने का अपमान, गुरु परशुराम का शाप, इंद्र द्वारा कवच-कुंडल लेना — फिर भी वे दानवीर और महाशूर बने रहे।",
+        question: "कर्ण के रथ का पहिया जमीन में क्यों धँस गया जब अर्जुन से लड़ रहे थे?",
+        choices: [
+          { text: "जमीन कमजोर थी", correct: false },
+          { text: "गुरु परशुराम के शाप के कारण — 'संकट में विद्या भूल जाओगे'", correct: true },
+          { text: "कृष्ण ने माया की", correct: false },
+          { text: "अर्जुन के बाण से", correct: false }
+        ],
+        feedback: "✅ सही! परशुराम ने शाप दिया था कि जब सबसे अधिक जरूरत होगी, तुम्हारी विद्या साथ छोड़ देगी। साथ ही भूमि देवी ने भी उनके रथ का पहिया जकड़ लिया। कर्ण रथ से उतरे पर श्रीकृष्ण के इशारे पर अर्जुन ने उनका वध कर दिया।"
+      },
+      {
+        shloka: "गदायुद्धे भीम-दुर्योधनयोः अंतिमः संग्रामः।",
+        story: "18वें दिन अंत में <strong>दुर्योधन</strong> घायल होकर एक तालाब में छुप गए। युधिष्ठिर ने ललकारा। <strong>भीम</strong> और दुर्योधन के बीच <strong>गदा युद्ध</strong> हुआ।",
+        question: "भीम ने दुर्योधन को कैसे मारा?",
+        choices: [
+          { text: "सिर पर गदा से", correct: false },
+          { text: "जाँघ (ऊरु) पर गदा से — जो नियम के विरुद्ध था", correct: true },
+          { text: "बाण से", correct: false },
+          { text: "शस्त्ररहित होने पर", correct: false }
+        ],
+        feedback: "✅ भीम ने द्रौपदी के चीरहरण के समय प्रतिज्ञा ली थी — 'दुर्योधन की जाँघ तोड़ूँगा।' उन्होंने वही किया, चाहे यह नियम के विरुद्ध था। बलराम जी क्रोधित हुए पर कृष्ण ने शांत किया। दुर्योधन की मृत्यु के साथ महाभारत युद्ध समाप्त हुआ।"
+      },
+      {
+        shloka: "अश्वत्थामा — ब्रह्मास्त्रं पाण्डवसंहाराय।",
+        story: "रात्रि में <strong>अश्वत्थामा</strong> ने सोए हुए पांडव-शिविर में प्रवेश किया और <strong>द्रौपदी के पाँचों पुत्रों</strong> को मारा। उसने <strong>ब्रह्मास्त्र</strong> भी चला दिया।",
+        question: "अश्वत्थामा के ब्रह्मास्त्र को किसने रोका और अश्वत्थामा को क्या दंड मिला?",
+        choices: [
+          { text: "अर्जुन ने काट दिया, अश्वत्थामा को मृत्युदंड मिला", correct: false },
+          { text: "अर्जुन ने प्रत्यस्त्र छोड़ा, कृष्ण ने दोनों शांत कराए — अश्वत्थामा की मणि छीनी और अमरत्व का शाप दिया", correct: true },
+          { text: "अश्वत्थामा को माफ कर दिया", correct: false },
+          { text: "व्यास जी ने रोका", correct: false }
+        ],
+        feedback: "✅ सही! कृष्ण ने अश्वत्थामा को शाप दिया — 'तुम 3000 वर्ष तक जंगलों में भटकोगे, कोई तुमसे बात नहीं करेगा, घावों से पीप बहती रहेगी।' उनके मस्तक की मणि छीन ली गई। कुछ लोग मानते हैं अश्वत्थामा आज भी जीवित हैं।"
+      },
+      {
+        shloka: "अभिमन्यु-पत्नी उत्तरा — परीक्षित गर्भे आसीत्।",
+        story: "अश्वत्थामा के ब्रह्मास्त्र से <strong>उत्तरा</strong> (अभिमन्यु की पत्नी) का गर्भ नष्ट होने लगा। <strong>कृष्ण</strong> ने अपने पुण्यों से उसके पुत्र को जीवित किया।",
+        question: "उत्तरा के इस पुत्र का क्या नाम था जो पांडवों का वंश आगे चलाया?",
+        choices: [
+          { text: "अभिमन्यु पुत्र", correct: false },
+          { text: "परीक्षित — जिन्हें 'परमात्मा ने परीक्षित किया'", correct: true },
+          { text: "जनमेजय", correct: false },
+          { text: "विक्रमादित्य", correct: false }
+        ],
+        feedback: "✅ सही! राजा परीक्षित — उन्हें मृत अवस्था में कृष्ण ने जीवित किया। उनके पुत्र जनमेजय के दरबार में वैशंपायन ने महाभारत सुनाई। परीक्षित को एक ऋषि पुत्र ने शाप दिया कि 7 दिन में तक्षक नाग काटेगा — यही महाभारत की आरंभिक कथा है।"
+      },
+      {
+        shloka: "स्वर्गारोहण पर्व — पाण्डवानां अंतिम यात्रा।",
+        story: "<strong>युधिष्ठिर</strong> ने राज किया और अंत में पांडवों ने <strong>महाप्रस्थान</strong> का मार्ग लिया — हिमालय की ओर। एक-एक कर सब गिरते गए। केवल युधिष्ठिर और एक <strong>श्वान (कुत्ता)</strong> साथ रहे।",
+        question: "स्वर्ग के द्वार पर युधिष्ठिर ने क्या किया जब इंद्र ने कहा कुत्ते को छोड़ दो?",
+        choices: [
+          { text: "कुत्ते को छोड़ दिया", correct: false },
+          { text: "मान नहीं लिया — कहा जो मेरे साथ रहा उसे नहीं छोड़ूँगा", correct: true },
+          { text: "इंद्र से लड़े", correct: false },
+          { text: "वापस लौट गए", correct: false }
+        ],
+        feedback: "✅ यही युधिष्ठिर की महानता थी! वह कुत्ता साक्षात् धर्मराज (यम) थे जो परीक्षा ले रहे थे। युधिष्ठिर के इस निर्णय से वे सशरीर स्वर्ग गए। यही महाभारत का सार है — धर्म ही जीवन का सर्वोच्च मूल्य है।"
+      }
+    ]
+  }
+];
+
+// ========== STATE ==========
+let currentChapter = null;
+let currentQuestionIndex = 0;
+let currentScore = 0;
+let totalScore = parseInt(localStorage.getItem('mb_total_score') || '0');
+let completedChapters = JSON.parse(localStorage.getItem('mb_completed') || '[]');
+let answered = false;
+
+// ========== SCREENS ==========
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).style.display = '';
+  document.getElementById(id).classList.add('active');
+}
+
+function showChapterSelect() {
+  renderChapters();
+  showScreen('chapter-screen');
+}
+
+function renderChapters() {
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = chapters.map(ch => {
+    const isCompleted = completedChapters.includes(ch.id);
+    return `
+      <div class="chapter-card ${isCompleted ? 'completed' : ''}" onclick="startChapter(${ch.id})">
+        <div class="chapter-num">पर्व ${ch.id + 1}</div>
+        <span class="chapter-emoji">${ch.emoji}</span>
+        <div class="chapter-name">${ch.name}</div>
+        <div class="chapter-hindi">${ch.hindi}</div>
+        <div class="chapter-desc">${ch.desc}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ========== GAME LOGIC ==========
+function startChapter(id) {
+  currentChapter = chapters[id];
+  currentQuestionIndex = 0;
+  currentScore = 0;
+  showScreen('game-screen');
+  document.getElementById('topbar-chapter-name').textContent = currentChapter.hindi;
+  document.getElementById('total-score-display').textContent = totalScore;
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = currentChapter.questions[currentQuestionIndex];
+  const total = currentChapter.questions.length;
+  answered = false;
+
+  // Progress
+  document.getElementById('progress-text').textContent = `प्रश्न ${currentQuestionIndex + 1}/${total}`;
+  document.getElementById('score-text').textContent = `अंक: ${currentScore}`;
+  document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / total) * 100}%`;
+
+  // Story
+  document.getElementById('shloka-text').textContent = q.shloka;
+  document.getElementById('story-text').innerHTML = q.story + `<br><br><strong style="color:var(--orange)">${q.question}</strong>`;
+
+  // Choices
+  const container = document.getElementById('choices-container');
+  container.innerHTML = q.choices.map((c, i) => `
+    <button class="choice-btn" onclick="selectChoice(${i})">${c.text}</button>
+  `).join('');
+
+  // Hide feedback and next
+  document.getElementById('feedback-panel').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+}
+
+function selectChoice(index) {
+  if (answered) return;
+  answered = true;
+
+  const q = currentChapter.questions[currentQuestionIndex];
+  const buttons = document.querySelectorAll('.choice-btn');
+  const isCorrect = q.choices[index].correct;
+
+  buttons.forEach((btn, i) => {
+    if (q.choices[i].correct) btn.classList.add('correct');
+    else btn.classList.add(i === index ? 'wrong' : 'disabled');
+  });
+
+  if (isCorrect) currentScore += 20;
+
+  const fb = document.getElementById('feedback-panel');
+  fb.className = `feedback-panel ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = isCorrect
+    ? `<strong style="color:#2ecc71">✅ सही जवाब!</strong><br>${q.feedback}`
+    : `<strong style="color:var(--crimson-light)">❌ गलत।</strong><br>${q.feedback}`;
+  fb.style.display = 'block';
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+  const isLast = currentQuestionIndex === currentChapter.questions.length - 1;
+  nextBtn.textContent = isLast ? '📜 परिणाम देखें' : 'अगला प्रश्न →';
+}
+
+function nextQuestion() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex >= currentChapter.questions.length) {
+    showResult();
+  } else {
+    loadQuestion();
+    window.scrollTo(0, 0);
+  }
+}
+
+function showResult() {
+  totalScore += currentScore;
+  localStorage.setItem('mb_total_score', totalScore);
+  if (!completedChapters.includes(currentChapter.id)) {
+    completedChapters.push(currentChapter.id);
+    localStorage.setItem('mb_completed', JSON.stringify(completedChapters));
+  }
+
+  const max = currentChapter.questions.length * 20;
+  const pct = Math.round((currentScore / max) * 100);
+
+  let emoji, title, msg;
+  if (pct === 100) {
+    emoji = '🏆'; title = 'युधिष्ठिर तुल्य!';
+    msg = `आपने सभी प्रश्नों के सही उत्तर दिए! आप महाभारत के सच्चे ज्ञाता हैं। धर्मराज युधिष्ठिर भी आपसे प्रसन्न होंगे।`;
+  } else if (pct >= 60) {
+    emoji = '⚔️'; title = 'अर्जुन की भाँति!';
+    msg = `उत्तम प्रयास! आपका ज्ञान अर्जुन की धनुर्विद्या की तरह है — लक्ष्य के करीब पर अभी और साधना की जरूरत है।`;
+  } else {
+    emoji = '📖'; title = 'और अभ्यास करें';
+    msg = `घबराइए नहीं! यह तो पहला पाठ है। 'अभ्यासयोगेन ततो मामिच्छाप्तुं धनञ्जय' — अभ्यास से ही ज्ञान मिलता है।`;
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-score').textContent = `${currentScore}/${max}`;
+  document.getElementById('result-message').textContent = msg;
+  showScreen('result-screen');
+}
+
+function retryChapter() { startChapter(currentChapter.id); }
+function confirmBack() { if (confirm('क्या आप पर्व छोड़ना चाहते हैं?')) showChapterSelect(); }
+</script>
+</body>
+</html>
