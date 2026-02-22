@@ -1182,7 +1182,12 @@ function selectChoice(index) {
     else btn.classList.add(i === index ? 'wrong' : 'disabled');
   });
 
-  if (isCorrect) currentScore += 20;
+  if (isCorrect) {
+  playCorrect();      // 🔔 सही पर शंख बजेगा
+  currentScore += 20;
+} else {
+  playWrong();        // ❌ गलत पर buzzer बजेगा
+}
 
   const fb = document.getElementById('feedback-panel');
   fb.className = `feedback-panel ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
@@ -1239,6 +1244,15 @@ function showResult() {
 
 function retryChapter() { startChapter(currentChapter.id); }
 function confirmBack() { if (confirm('क्या आप पर्व छोड़ना चाहते हैं?')) showChapterSelect(); }
+  function playCorrect() {
+  document.getElementById("correctSound").play();
+}
+
+function playWrong() {
+  document.getElementById("wrongSound").play();
+}
 </script>
+<audio id="correctSound" src="conch.mp3"></audio>
+<audio id="wrongSound" src="buzzer.mp3"></audio>
 </body>
 </html>
