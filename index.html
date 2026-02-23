@@ -6,20 +6,74 @@
 <title>महाभारत - The Epic Game</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
- .timer-wrapper {
-  position: relative;
-  width: 100px;
-  margin: 15px auto;
+ <style>
+:root{
+  --gold:#D4A017;
+  --bg:#050510;
+  --text:#F5E6C8;
 }
 
-#timer-text {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 22px;
-  font-weight: bold;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Crimson Pro',serif;
+  text-align:center;
+  min-height:100vh;
+  padding:20px;
+}
+
+h1{
+  font-family:'Cinzel Decorative',cursive;
+  font-size:2.5rem;
+  color:var(--gold);
+  margin-bottom:20px;
+}
+
+button{
+  background:linear-gradient(135deg,#8B6914,var(--gold));
+  border:none;
+  padding:12px 25px;
+  font-family:'Cinzel Decorative',cursive;
+  color:#000;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:15px;
+  transition:.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  margin:20px auto;
+  max-width:500px;
+  border:1px solid var(--gold);
+}
+
+.timer-wrapper{
+  position:relative;
+  width:100px;
+  margin:15px auto;
+}
+
+#timer-text{
+  position:absolute;
+  top:35%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:22px;
+  font-weight:bold;
+}
+</style>
 </style>
 </head>
 <body>
