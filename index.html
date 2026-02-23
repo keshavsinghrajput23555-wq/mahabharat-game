@@ -668,7 +668,7 @@ function showResult() {
 
   const max = currentChapter.questions.length * 20;
   const pct = Math.round((currentScore / max) * 100);
-
+saveHighScore(currentScore);
   let emoji, title, msg;
   if (pct === 100) {
     emoji = '🏆'; title = 'युधिष्ठिर तुल्य!';
