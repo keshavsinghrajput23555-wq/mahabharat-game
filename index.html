@@ -159,6 +159,10 @@ button:hover{
   <div class="result-emoji" id="result-emoji">🏆</div>
   <h2 class="result-title" id="result-title">शाबाश!</h2>
   <div class="result-score-big" id="result-score"></div>
+ <div class="high-score-box">
+  <h3>🏆 High Score</h3>
+  <p id="high-score">0</p>
+</div>
   <p class="result-message" id="result-message"></p>
   <div class="result-actions">
     <button class="btn-secondary" onclick="retryChapter()">↺ फिर से खेलें</button>
@@ -167,6 +171,23 @@ button:hover{
 </div>
 
 <script>
+ function saveHighScore(score){
+  let highScore = localStorage.getItem("mahabharatHighScore");
+
+  if(highScore === null || score > highScore){
+    localStorage.setItem("mahabharatHighScore", score);
+    highScore = score;
+  }
+
+  document.getElementById("high-score").innerText = highScore;
+}
+
+function loadHighScore(){
+  let highScore = localStorage.getItem("mahabharatHighScore");
+  if(highScore !== null){
+    document.getElementById("high-score").innerText = highScore;
+  }
+}
 // ========== DATA ==========
 
 const chapters = [
